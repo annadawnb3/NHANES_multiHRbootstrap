@@ -1,5 +1,10 @@
+install.packages("MASS")
+install.packages("rms")
+library(MASS)
+library(rms)
+
 # Read in csv file
-data_github <- 
+data_github <- read.csv("[insert file pathway]")
 
 # Run multivariable Cox proportional hazard model
 new.cph <- cph(formula = Surv(time_interview, CV_death == 1) ~  doc_dm_new + 
