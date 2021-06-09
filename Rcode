@@ -1,0 +1,37 @@
+# Read in csv file
+data_github <- 
+
+# Run multivariable Cox proportional hazard model
+new.cph <- cph(formula = Surv(time_interview, CV_death == 1) ~  doc_dm_new + 
+                                                                act_others_new + 
+                                                                water_treat +
+                                                                alb_all + 
+                                                                birth_new + 
+                                                                told_hbp + 
+                                                                ALT_all + 
+                                                                rx_use + 
+                                                                methyl_acid_all + 
+                                                                cholesterol_all +
+                                                                race_new + 
+                                                                exp_fumes + 
+                                                                told_heartattack + 
+                                                                gender + 
+                                                                marital_new +
+                                                                smoke_100 +
+                                                                lymph_all + 
+                                                                told_chd + 
+                                                                doc_highcholesterol + 
+                                                                systolic_all + 
+                                                                creat_all + 
+                                                                Platelet_all + 
+                                                                WBC_all +
+                                                                health_cond_new + 
+                                                                ann_income_cat + 
+                                                                nut_facts + 
+                                                                special_equip + 
+                                                                age_cat_new, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = data_github)
+new.cph
+
+# Internal validation of above model through bootstrapping
+v <- validate(new.cph, method = "boot", B = 150)
+v
