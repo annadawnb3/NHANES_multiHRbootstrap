@@ -1,42 +1,201 @@
+# Install Packages
 install.packages("MASS")
 install.packages("rms")
+
+# Run Packages
 library(MASS)
 library(rms)
 
-# Read in csv file
-data_github <- read.csv("[insert file pathway]")
+# Read in csv files 
+full <- read.csv("[insert file pathway]")
+oldermales <- read.csv("[insert file pathway]")
+olderfem <- read.csv("[insert file pathway]")
+youngmales <- read.csv("[insert file pathway]")
+youngfem <- read.csv("[insert file pathway]")
 
 # Run multivariable Cox proportional hazard model
-new.cph <- cph(formula = Surv(time_interview, CV_death == 1) ~  doc_dm_new + 
-                                                                act_others_new + 
-                                                                water_treat +
-                                                                alb_all + 
-                                                                birth_new + 
-                                                                told_hbp + 
-                                                                ALT_all + 
-                                                                rx_use + 
-                                                                methyl_acid_all + 
-                                                                cholesterol_all +
-                                                                race_new + 
-                                                                exp_fumes + 
-                                                                told_heartattack + 
-                                                                gender + 
-                                                                marital_new +
-                                                                smoke_100 +
-                                                                lymph_all + 
-                                                                told_chd + 
-                                                                doc_highcholesterol + 
-                                                                systolic_all + 
-                                                                creat_all + 
-                                                                Platelet_all + 
-                                                                WBC_all +
-                                                                health_cond_new + 
-                                                                ann_income_cat + 
-                                                                nut_facts + 
-                                                                special_equip + 
-                                                                age_cat_new, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = data_github)
-new.cph
+# Full Cohort
+cox.full <- cph(formula = Surv(time_interview, CV_death == 1) ~  
+                 doc_dm_new + 
+                 act_others_new + 
+                 water_treat +
+                 alb_all + 
+                 birth_new + 
+                 told_hbp + 
+                 ALT_all + 
+                 rx_use + 
+                 methyl_acid_all + 
+                 cholesterol_all +
+                 race_new + 
+                 exp_fumes + 
+                 told_heartattack + 
+                 gender + 
+                 marital_new +
+                 smoke_100 +
+                 lymph_all + 
+                 told_chd + 
+                 doc_highcholesterol + 
+                 systolic_all + 
+                 creat_all + 
+                 Platelet_all + 
+                 WBC_all +
+                 health_cond_new + 
+                 ann_income_cat + 
+                 nut_facts + 
+                 special_equip + 
+                 age_cat_new, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = full)
+cox.full
+
+# Older Males
+cox.om <- cph(formula = Surv(time_interview, CV_death == 1) ~  
+                 age_all+ 
+                 ann_income_cat+ 
+                 edu_level_cat+
+                 marital+ 
+                 race+
+                 birth+
+                 fast_food+
+                 nut_facts+
+                 smoke_100+
+                 alb_all+
+                 methyl_acid_all+
+                 d_hdl_all+
+                 creat_all+
+                 eosin_all+
+                 Platelet_all+
+                 tot_chol_all+
+                 doc_highcholesterol+
+                 insulin+
+                 told_chd+
+                 told_heartattack+
+                 health_cond+
+                 systolic_all+
+                 BMI_all+
+                 tap_water+
+                 special_equip, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = oldermales)
+cox.om
+
+# Older Females
+cox.of <- cph(formula = Surv(time_interview, CV_death == 1) ~  
+                 age_all+ 
+                 ann_income_cat+ 
+                 insurance+ 
+                 birth+ 
+                 fast_food+ 
+                 nut_facts+ 
+                 ALT_all+ 
+                 methyl_acid_all+ 
+                 creat_all+ 
+                 gluc_all+ 
+                 lymph_all+ 
+                 Platelet_all+ 
+                 WBC_all+ 
+                 sleep_dis+ 
+                 told_heartattack+ 
+                 mental_health+ 
+                 systolic_all+ 
+                 water_treat+ 
+                 smoke_home+ 
+                 special_equip, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = olderfem)
+cox.of
+
+# Younger Males
+cox.ym <- cph(formula = Surv(time_interview, CV_death == 1) ~ 
+                 age_all+ 
+                 marital+ 
+                 race+ 
+                 nut_facts+ 
+                 alb_all+ 
+                 d_hdl_all+ 
+                 Platelet_all+ 
+                 tot_chol_all+ 
+                 doc_highcholesterol+ 
+                 doc_dm+ 
+                 pred_cort+ 
+                 told_chd+ 
+                 told_heartattack+ 
+                 told_hbp+ 
+                 told_kid+ 
+                 systolic_all+ 
+                 smoke_home+ 
+                 exp_fumes+ 
+                 special_equip, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = youngmales)
+cox.ym
+
+# Younger Females
+cox.yf <- cph(formula = Surv(time_interview, CV_death == 1) ~  
+                 age_all+ 
+                 race+ 
+                 birth+ 
+                 chm+ 
+                 rx_use+ 
+                 act_others+ 
+                 nut_facts+ 
+                 tot_chol_all+ 
+                 WBC_all+ 
+                 insulin+ 
+                 pred_cort+ 
+                 chf+ 
+                 arthritis+ 
+                 told_chd+ 
+                 told_kid+ 
+                 smoke_home+ 
+                 special_equip, x=TRUE, y=TRUE, surv=TRUE, time.inc = 1.5, data = youngfem)
+cox.yf
 
 # Internal validation of above model through bootstrapping
-v <- validate(new.cph, method = "boot", B = 150)
-v
+# Full Cohort
+val.full <- validate(cox.full, method = "boot", B = 150)
+val.full
+
+# Older Males
+val.om <- validate(cox.om, method = "boot", B = 150)
+val.om
+
+# Older Females
+val.of <- validate(cox.of, method = "boot", B = 150)
+val.of
+
+# Younger Males
+val.ym <- validate(cox.ym, method = "boot", B = 150)
+val.ym
+
+# Younger Females
+val.yf <- validate(cox.yf, method = "boot", B = 150)
+val.yf
+
+# cal <- calibrate(new.cph, time_interview, u = 1.5, cmethod = 'KM', m = 50, B = 150); plot(cal, add = pa)
+# Full Cohort 
+valfull <- val.surv(cox.full)
+plot(valfull, 
+     main = "Calibration Plot", 
+     xlab = "Predicted Probability of CV Related Death Survival", 
+     ylab = "Actual Probability of CV Related Death Survival")
+
+# Older Males
+val.om <- val.surv(cox.om)
+plot(val.om, 
+     main = "Calibration Plot", 
+     xlab = "Predicted Probability of CV Related Death Survival", 
+     ylab = "Actual Probability of CV Related Death Survival")
+
+# Older Females
+val.of <- val.surv(cox.of)
+plot(val.of, 
+     main = "Calibration Plot", 
+     xlab = "Predicted Probability of CV Related Death Survival", 
+     ylab = "Actual Probability of CV Related Death Survival")
+
+# Younger Males
+val.ym <- val.surv(cox.ym)
+plot(val.ym, 
+     main = "Calibration Plot", 
+     xlab = "Predicted Probability of CV Related Death Survival", 
+     ylab = "Actual Probability of CV Related Death Survival")
+
+# Younger Females
+val.yf <- val.surv(cox.yf)
+plot(val.yf, 
+     main = "Calibration Plot", 
+     xlab = "Predicted Probability of CV Related Death Survival", 
+     ylab = "Actual Probability of CV Related Death Survival")
